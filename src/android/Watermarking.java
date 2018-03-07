@@ -37,7 +37,8 @@ public class Watermarking {
 
     boolean watermark(String url) {
         //file:///storage/emulated/0/Android/data/au.com.spatialvision.consol.watermarking/cache/1520400932073.jpg
-        String filePath = url.substring(7) + ".jpg";
+        String filePath = url.substring(7);
+
         //Log.d(LOG_TAG, "Watermarking filePath: " + filePath);
         Log.d(LOG_TAG, "Watermarking url: " + url);
         //Bitmap bMap = BitmapFactory.decodeFile(url);
