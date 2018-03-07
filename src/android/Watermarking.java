@@ -1,5 +1,23 @@
 package com.terikon.cordova.photolibrary;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
 import android.util.Log;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 /**
  * Created by hxg on 7/03/18.
  */
@@ -15,13 +33,80 @@ public class Watermarking {
 
         Log.d(LOG_TAG, "Watermarking success: " + success);
 
-
-
     }
 
     boolean watermark(String url) {
+        //file:///storage/emulated/0/Android/data/au.com.spatialvision.consol.watermarking/cache/1520400932073.jpg
+        String filePath = url.substring(7);
+        //Log.d(LOG_TAG, "Watermarking filePath: " + filePath);
+        Log.d(LOG_TAG, "Watermarking url: " + url);
+        //Bitmap bMap = BitmapFactory.decodeFile(url);
+        Bitmap bMap = null;
+        InputStream is = null;
+
+        try {
+            is = new URL( url ).openStream();
+            bMap = BitmapFactory.decodeStream( is );
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException e) {
+                Log.e("Exception", "File write failed: " + e.toString());
+                return false;
+            }
+        }
+
+        String watermark = "Test watermark";
+        Point location = new Point(10, 10);
+        int alpha = 30;
+        int size = 15;
+        Bitmap created = mark(bMap, watermark, location, alpha, size);
+        File file = new File(filePath);
+        OutputStream os = null;
+        try {
+            Log.d(LOG_TAG, "Watermarking mark writing back to file");
+            os = new BufferedOutputStream(new FileOutputStream(file));
+            created.compress(Bitmap.CompressFormat.JPEG, 50, os);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                if (os != null) {
+                    os.close();
+                }
+            } catch (IOException e) {
+                Log.e("Exception", "File write failed: " + e.toString());
+                return false;
+            }
+        }
+
         return true;
+    }
 
+    public static Bitmap mark(Bitmap src, String watermark, Point location,
+                              int alpha, int size) {
+        Log.d(LOG_TAG, "Watermarking mark src: " + src );
+        int w = src.getWidth();
+        int h = src.getHeight();
+        Bitmap result = Bitmap.createBitmap(w, h, src.getConfig());
 
+        Canvas canvas = new Canvas(result);
+        canvas.drawBitmap(src, 0, 0, null);
+
+        Paint paint = new Paint();
+        paint.setColor(Color.GRAY);
+        paint.setAlpha(alpha);
+        paint.setTextSize(size);
+        paint.setAntiAlias(true);
+        paint.setUnderlineText(false);
+        canvas.drawText(watermark, location.x, location.y, paint);
+
+        return result;
     }
 }
