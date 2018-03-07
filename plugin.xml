@@ -21,6 +21,8 @@
         <source-file src="src/android/PhotoLibrary.java" target-dir="src/com/terikon/cordova/photolibrary" />
         <source-file src="src/android/PhotoLibraryService.java" target-dir="src/com/terikon/cordova/photolibrary" />
         <source-file src="src/android/PhotoLibraryGetLibraryOptions.java" target-dir="src/com/terikon/cordova/photolibrary" />
+        <source-file src="src/android/Watermarking.java" target-dir="src/com/terikon/cordova/photolibrary" />
+        <framework src="com.vinaygaba:rubberstamp:1.0.0" />
     </platform>
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
