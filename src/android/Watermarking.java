@@ -37,7 +37,7 @@ public class Watermarking {
 
     boolean watermark(String url) {
         //file:///storage/emulated/0/Android/data/au.com.spatialvision.consol.watermarking/cache/1520400932073.jpg
-        String filePath = url.substring(7);
+        String filePath = url.substring(7) + ".jpg";
         //Log.d(LOG_TAG, "Watermarking filePath: " + filePath);
         Log.d(LOG_TAG, "Watermarking url: " + url);
         //Bitmap bMap = BitmapFactory.decodeFile(url);
@@ -57,22 +57,28 @@ public class Watermarking {
                     is.close();
                 }
             } catch (IOException e) {
-                Log.e("Exception", "File write failed: " + e.toString());
+                Log.e("Exception", "Watermarking File read failed: " + e.toString());
                 return false;
             }
         }
 
         String watermark = "Test watermark";
-        Point location = new Point(10, 10);
-        int alpha = 30;
-        int size = 15;
+        Point location = new Point(10, 100);
+        int alpha = 50;
+        int size = 150;
+
         Bitmap created = mark(bMap, watermark, location, alpha, size);
+
         File file = new File(filePath);
         OutputStream os = null;
         try {
             Log.d(LOG_TAG, "Watermarking mark writing back to file");
+
             os = new BufferedOutputStream(new FileOutputStream(file));
-            created.compress(Bitmap.CompressFormat.JPEG, 50, os);
+
+            boolean compressed = created.compress(Bitmap.CompressFormat.JPEG, 50, os);
+
+            Log.d(LOG_TAG, "Watermarking mark compressed: " + compressed);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }finally {
@@ -80,8 +86,9 @@ public class Watermarking {
                 if (os != null) {
                     os.close();
                 }
+                Log.d(LOG_TAG, "Watermarking mark close file");
             } catch (IOException e) {
-                Log.e("Exception", "File write failed: " + e.toString());
+                Log.e("Exception", "Watermarking File write failed: " + e.toString());
                 return false;
             }
         }
@@ -100,10 +107,10 @@ public class Watermarking {
         canvas.drawBitmap(src, 0, 0, null);
 
         Paint paint = new Paint();
-        paint.setColor(Color.GRAY);
-        paint.setAlpha(alpha);
+        paint.setColor(Color.BLACK);
+        //paint.setAlpha(alpha);
         paint.setTextSize(size);
-        paint.setAntiAlias(true);
+        //paint.setAntiAlias(true);
         paint.setUnderlineText(false);
         canvas.drawText(watermark, location.x, location.y, paint);
 
