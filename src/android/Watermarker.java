@@ -27,12 +27,11 @@ public class Watermarker {
     final LinePositions position;
     private Bitmap marking;
 
-    public Watermarker(Context context, Bitmap src, WatermarkLines lines) {
-        Log.d(LOG_TAG, "src: " + src);
-        photo = new Photo(src);
+    public Watermarker(Context context, Photo photo, WatermarkLines lines) {
         Log.d(LOG_TAG, "photo: " + photo);
+        this.photo = photo;
 
-        marking = src;
+        marking = photo.src;
 
         headerFooterSize = new Size(photo.size).multiply(1, 0.12);
         header = new Rect(0, 0, photo.size.width, headerFooterSize.height);
@@ -48,8 +47,9 @@ public class Watermarker {
         this.lines = lines;
     }
 
-    Bitmap mark() {
-        return markHeaderFooter(marking)
+    Photo mark() {
+        return new Photo(
+                markHeaderFooter(marking)
                 //top left
                 .mark(marking, lines.id, RubberStampPosition.TOP_LEFT, position.topLeftLine1)
                 .mark(marking, lines.address, RubberStampPosition.TOP_LEFT, position.topLeftLine2)
@@ -62,7 +62,7 @@ public class Watermarker {
                 //bottom right
                 .mark(marking, lines.date, RubberStampPosition.BOTTOM_RIGHT, position.bottomRightLine2)
                 .mark(marking, lines.time, RubberStampPosition.BOTTOM_RIGHT, position.bottomRightLine1)
-                .marking;
+                .marking, photo.exif);
     }
 
     private Watermarker mark(Bitmap base, String watermark, RubberStampPosition position, Margin margin) {
@@ -70,7 +70,7 @@ public class Watermarker {
                 .base(base)
                 .rubberStamp(watermark)
                 .rubberStampPosition(position)
-                .alpha(128)
+                .alpha(255)
                 .margin(margin.x, margin.y)
                 .textColor(Color.WHITE)
                 .textSize(this.position.textSize)

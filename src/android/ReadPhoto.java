@@ -6,6 +6,8 @@ import android.util.Log;
 
 //import org.apache.cordova.camera.*;
 
+import org.apache.cordova.camera.ExifHelper;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -24,14 +26,16 @@ public class ReadPhoto {
         this.url = url;
     }
 
-    Bitmap read() {
+    Photo read() {
         Log.d(LOG_TAG, "read file from url: " + url);
+        String filePath = url.replace("file://", "");
+        ExifHelper exif = new ExifHelper();
         Bitmap read = null;
         InputStream is = null;
         try {
-            String filePath = url.replace("file://", "");
-            //ExifHelper exifData = new ExifHelper();
-            //exifData.createInFile(filePath);
+            exif.createInFile(filePath);
+            exif.readExifData();
+            //rotate = exif.getOrientation();
 
             //return BitmapFactory.decodeFile(url);
             is = new URL(url).openStream();
@@ -39,7 +43,7 @@ public class ReadPhoto {
             if(read == null) {
                 throw new RuntimeException("Unable to create bitmap from url");
             }
-            return read;
+            Log.d(LOG_TAG, "read: " + read);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -52,7 +56,7 @@ public class ReadPhoto {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            return read;
+            return new Photo(read, exif);
         }
     }
 }

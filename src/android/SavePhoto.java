@@ -26,7 +26,7 @@ public class SavePhoto {
         this.url = url;
     }
 
-    boolean save(Bitmap toSave) {
+    boolean save(Photo toSave) {
         Log.d(LOG_TAG, "save url: " + url);
         String filePath = url.substring(7);
         File file = new File(filePath);
@@ -35,7 +35,10 @@ public class SavePhoto {
         try {
             Log.d(LOG_TAG, "save to file: " + filePath);
             os = new BufferedOutputStream(new FileOutputStream(file));
-            success = toSave.compress(Bitmap.CompressFormat.JPEG, 50, os);
+            success = toSave.src.compress(Bitmap.CompressFormat.JPEG, 50, os);
+
+            toSave.exif.createOutFile(filePath);
+            toSave.exif.writeExifData();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } finally {
@@ -46,7 +49,9 @@ public class SavePhoto {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+
             return success;
         }
-    }    
+
+    }
 }
