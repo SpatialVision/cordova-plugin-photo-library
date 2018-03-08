@@ -22,12 +22,10 @@ import org.json.JSONObject;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
 import java.net.URL;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
@@ -195,7 +193,7 @@ public class PhotoLibraryService {
 
   public void saveImage(final Context context, final CordovaInterface cordova, final String url, String album, final JSONObjectRunnable completion)
     throws IOException, URISyntaxException {
-    JobDetails details = new JobDetails("B1427145",
+    WatermarkLines details = new WatermarkLines("B1427145",
             "44, AARONS PASS NSW 2850",
             "TEST_PROJ5",
             "37.81671 "+(char) 0x00B0+" S",

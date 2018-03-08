@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.Log;
 
 import com.vinaygaba.rubberstamp.RubberStamp;
@@ -17,33 +18,51 @@ import com.vinaygaba.rubberstamp.RubberStampPosition;
 
 public class Watermarker {
     private static final String LOG_TAG = "Watermarker";
-
-    final JobDetails details;
+    final Photo photo;
+    final Size headerFooterSize;
+    final Rect header;
+    final Rect footer;
+    final WatermarkLines lines;
     final Context context;
-    final Position position;
+    final LinePositions position;
     private Bitmap marking;
 
-    public Watermarker(Context context, Bitmap src, JobDetails details) {
+    public Watermarker(Context context, Bitmap src, WatermarkLines lines) {
         Log.d(LOG_TAG, "src: " + src);
-        this.marking = src;
-        final int width = src.getWidth();
-        final int height = src.getHeight();
-        position = new Position(width, height);
+        photo = new Photo(src);
+        Log.d(LOG_TAG, "photo: " + photo);
+
+        marking = src;
+
+        headerFooterSize = new Size(photo.size).multiply(1, 0.15);
+        header = new Rect(0, 0, photo.size.width, headerFooterSize.height);
+        footer = new Rect(0, (photo.size.height - headerFooterSize.height), photo.size.width, photo.size.height);
+
+        Log.d(LOG_TAG, "headerFooterSize: " + headerFooterSize);
+        Log.d(LOG_TAG, "header: " + header);
+        Log.d(LOG_TAG, "footer: " + footer);
+
+        position = new LinePositions();
 
         this.context = context;
-        this.details = details;
+        this.lines = lines;
     }
 
     Bitmap mark() {
-        return mark(marking, details.id, RubberStampPosition.TOP_LEFT, position.topLeftLine1)
-                .mark(marking, details.address, RubberStampPosition.TOP_LEFT, position.topLeftLine2)
-                .mark(marking, details.name, RubberStampPosition.TOP_LEFT, position.topLeftLine3)
-                .mark(marking, details.name, RubberStampPosition.TOP_RIGHT, position.topRightLine1)
-                .mark(marking, details.lat, RubberStampPosition.BOTTOM_LEFT, position.bottomLeftLine2)
-                .mark(marking, details.lng, RubberStampPosition.BOTTOM_LEFT, position.bottomLeftLine1)
-                .mark(marking, details.date, RubberStampPosition.BOTTOM_RIGHT, position.bottomRightLine2)
-                .mark(marking, details.time, RubberStampPosition.BOTTOM_RIGHT, position.bottomRightLine1)
-                .markBg(marking).marking;
+        return markHeaderFooter(marking)
+                //top left
+                .mark(marking, lines.id, RubberStampPosition.TOP_LEFT, position.topLeftLine1)
+                .mark(marking, lines.address, RubberStampPosition.TOP_LEFT, position.topLeftLine2)
+                .mark(marking, lines.name, RubberStampPosition.TOP_LEFT, position.topLeftLine3)
+                //top right
+                .mark(marking, lines.name, RubberStampPosition.TOP_RIGHT, position.topRightLine1)
+                //bottom left
+                .mark(marking, lines.lat, RubberStampPosition.BOTTOM_LEFT, position.bottomLeftLine2)
+                .mark(marking, lines.lng, RubberStampPosition.BOTTOM_LEFT, position.bottomLeftLine1)
+                //bottom right
+                .mark(marking, lines.date, RubberStampPosition.BOTTOM_RIGHT, position.bottomRightLine2)
+                .mark(marking, lines.time, RubberStampPosition.BOTTOM_RIGHT, position.bottomRightLine1)
+                .marking;
     }
 
     private Watermarker mark(Bitmap base, String watermark, RubberStampPosition position, Margin margin) {
@@ -51,14 +70,10 @@ public class Watermarker {
                 .base(base)
                 .rubberStamp(watermark)
                 .rubberStampPosition(position)
-                .alpha(100)
+                .alpha(128)
                 .margin(margin.x, margin.y)
-                //.rotation(-45)
                 .textColor(Color.BLACK)
-                .textBackgroundColor(Color.WHITE)
-                //.textShadow(0.1f, 5, 5, Color.BLUE)
                 .textSize(this.position.textSize)
-                //.textFont("fonts/serif.ttf")
                 .build();
 
         RubberStamp rubberStamp = new RubberStamp(context);
@@ -66,23 +81,18 @@ public class Watermarker {
         return updateMarking(rubberStamp.addStamp(config));
     }
 
-    private Watermarker markBg(Bitmap src) {
-        Log.d(LOG_TAG, "markBg: " + src );
+    private Watermarker markHeaderFooter(Bitmap src) {
+        Log.d(LOG_TAG, "markHeaderFooter: " + src );
         int w = src.getWidth();
         int h = src.getHeight();
         Bitmap result = Bitmap.createBitmap(w, h, src.getConfig());
-
         Canvas canvas = new Canvas(result);
-
         canvas.drawBitmap(src, 0, 0, null);
-
         Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
-        paint.setAlpha(20);
-//        paint.setTextSize(size);
-//        //paint.setAntiAlias(true);
-//        paint.setUnderlineText(false);
-        canvas.drawRect(0, 0, 50, 50, paint);
+        paint.setColor(Color.GRAY);
+        paint.setAlpha(120);
+        canvas.drawRect(header, paint);
+        canvas.drawRect(footer, paint);
 
         return updateMarking(result);
     }
@@ -92,3 +102,4 @@ public class Watermarker {
         return this;
     }
 }
+
