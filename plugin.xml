@@ -23,9 +23,11 @@
         <source-file src="src/android/PhotoLibraryService.java" target-dir="src/com/terikon/cordova/photolibrary" />
         <source-file src="src/android/PhotoLibraryGetLibraryOptions.java" target-dir="src/com/terikon/cordova/photolibrary" />
 
-      <source-file src="src/android/Watermarking.java" target-dir="src/com/terikon/cordova/photolibrary" />
+        <source-file src="src/android/Watermarking.java" target-dir="src/com/terikon/cordova/photolibrary" />
         <source-file src="src/android/ReadPhoto.java" target-dir="src/com/terikon/cordova/photolibrary" />
         <source-file src="src/android/SavePhoto.java" target-dir="src/com/terikon/cordova/photolibrary" />
+
+
         <framework src="com.vinaygaba:rubberstamp:1.0.0" />
     </platform>
     <platform name="ios">
@@ -56,4 +58,6 @@
         </js-module>
     </platform>
     <dependency id="cordova-plugin-file" url="https://github.com/FairyDwarves/cordova-plugin-file.git"/>
+    <dependency id="cordova-plugin-camera" version="4.0.2"/>
+
 </plugin>

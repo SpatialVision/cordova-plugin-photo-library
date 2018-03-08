@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+//import org.apache.cordova.camera.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -27,6 +29,10 @@ public class ReadPhoto {
         Bitmap read = null;
         InputStream is = null;
         try {
+            String filePath = url.replace("file://", "");
+            //ExifHelper exifData = new ExifHelper();
+            //exifData.createInFile(filePath);
+
             //return BitmapFactory.decodeFile(url);
             is = new URL(url).openStream();
             read = BitmapFactory.decodeStream( is );
