@@ -26,20 +26,20 @@ import java.net.URL;
 public class Watermarking {
     private static final String LOG_TAG = "Watermarking";
 
-    public Watermarking(Context context, String url) {
-        Log.d(LOG_TAG, "url: " + url);
+    public Watermarking(Context context, String url, JobDetails details) {
+        Log.d(LOG_TAG, "url: " + url + ", " + details);
 
-        boolean success = watermark(context, url);
+        boolean success = watermark(context, url, details);
 
         Log.d(LOG_TAG, "success: " + success);
     }
 
-    boolean watermark(Context context, String url) {
+    boolean watermark(Context context, String url, JobDetails details) {
         Log.d(LOG_TAG, "watermark url: " + url);
 
         Bitmap toWatermark = new ReadPhoto(url).read();
 
-        Bitmap created  = new Watermarker(context, toWatermark).mark();
+        Bitmap created  = new Watermarker(context, toWatermark, details).mark();
 
 //        Log.d(LOG_TAG, "watermark toWatermark: " + toWatermark);
 //        String watermark = "Test watermark";

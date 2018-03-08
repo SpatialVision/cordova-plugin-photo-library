@@ -5,14 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.util.Log;
 
 import com.vinaygaba.rubberstamp.RubberStamp;
 import com.vinaygaba.rubberstamp.RubberStampConfig;
 import com.vinaygaba.rubberstamp.RubberStampPosition;
-
-import au.com.spatialvision.consol.watermarking.R;
 
 /**
  * Created by gota on 8/03/18.
@@ -21,58 +18,46 @@ import au.com.spatialvision.consol.watermarking.R;
 public class Watermarker {
     private static final String LOG_TAG = "Watermarker";
 
-    final int width;
-    final int height;
-
+    final JobDetails details;
     final Context context;
+    final Position position;
     private Bitmap marking;
 
-    public Watermarker(Context context, Bitmap src) {
+    public Watermarker(Context context, Bitmap src, JobDetails details) {
         Log.d(LOG_TAG, "src: " + src);
         this.marking = src;
-        width = src.getWidth();
-        height = src.getHeight();
+        final int width = src.getWidth();
+        final int height = src.getHeight();
+        position = new Position(width, height);
 
         this.context = context;
+        this.details = details;
     }
 
     Bitmap mark() {
-        return mark(marking, "Watermark TOP_LEFT", RubberStampPosition.TOP_LEFT)
-                .mark(marking, "Watermark TOP_RIGHT", RubberStampPosition.TOP_RIGHT)
-                .mark(marking, "Watermark BOTTOM_LEFT", RubberStampPosition.BOTTOM_LEFT)
-                .mark(marking, "Watermark BOTTOM_RIGHT", RubberStampPosition.BOTTOM_RIGHT)
+        return mark(marking, details.id, RubberStampPosition.TOP_LEFT, position.topLeftLine1)
+                .mark(marking, details.address, RubberStampPosition.TOP_LEFT, position.topLeftLine2)
+                .mark(marking, details.name, RubberStampPosition.TOP_LEFT, position.topLeftLine3)
+                .mark(marking, details.name, RubberStampPosition.TOP_RIGHT, position.topRightLine1)
+                .mark(marking, details.lat, RubberStampPosition.BOTTOM_LEFT, position.bottomLeftLine2)
+                .mark(marking, details.lng, RubberStampPosition.BOTTOM_LEFT, position.bottomLeftLine1)
+                .mark(marking, details.date, RubberStampPosition.BOTTOM_RIGHT, position.bottomRightLine2)
+                .mark(marking, details.time, RubberStampPosition.BOTTOM_RIGHT, position.bottomRightLine1)
                 .markBg(marking).marking;
-//        RubberStampConfig config = new RubberStampConfig.RubberStampConfigBuilder()
-//                .base(src)
-//                .rubberStamp("Watermark \n TOP LEFT")
-//                .rubberStampPosition(RubberStampPosition.TOP_LEFT)
-//                .alpha(100)
-//                .margin(30, 30)
-//                //.rotation(-45)
-//                .textColor(Color.BLACK)
-//                //.textBackgroundColor(Color.WHITE)
-//                //.textShadow(0.1f, 5, 5, Color.BLUE)
-//                .textSize(90)
-//                //.textFont("fonts/serif.ttf")
-//                .build();
-//
-//        RubberStamp rubberStamp = new RubberStamp(context);
-//
-//        return rubberStamp.addStamp(config);
     }
 
-    private Watermarker mark(Bitmap base, String watermark, RubberStampPosition position) {
+    private Watermarker mark(Bitmap base, String watermark, RubberStampPosition position, Margin margin) {
         RubberStampConfig config = new RubberStampConfig.RubberStampConfigBuilder()
                 .base(base)
                 .rubberStamp(watermark)
                 .rubberStampPosition(position)
                 .alpha(100)
-                .margin(30, 30)
+                .margin(margin.x, margin.y)
                 //.rotation(-45)
                 .textColor(Color.BLACK)
-                //.textBackgroundColor(Color.WHITE)
+                .textBackgroundColor(Color.WHITE)
                 //.textShadow(0.1f, 5, 5, Color.BLUE)
-                .textSize(90)
+                .textSize(this.position.textSize)
                 //.textFont("fonts/serif.ttf")
                 .build();
 
@@ -81,7 +66,7 @@ public class Watermarker {
         return updateMarking(rubberStamp.addStamp(config));
     }
 
-    public Watermarker markBg(Bitmap src) {
+    private Watermarker markBg(Bitmap src) {
         Log.d(LOG_TAG, "markBg: " + src );
         int w = src.getWidth();
         int h = src.getHeight();
