@@ -28,8 +28,8 @@ public class LinePositions {
        final int baseMargin = 30;
        final int leftX = baseMargin;
        final int rightX = -(baseMargin * 3);
-       final int topLin2Y = toInt(baseMargin + (textSize * lineMultiply));
-       final int topLin3Y = toInt(baseMargin + (textSize * lineMultiply * 2));
+       final int topLin2Y = toInt((textSize * lineMultiply));
+       final int topLin3Y = toInt((textSize * lineMultiply * 2));
 
        final int bottomLine1Y = -(baseMargin);
        final int bottomLine2Y = -toInt(baseMargin + (textSize * lineMultiply));
@@ -40,8 +40,8 @@ public class LinePositions {
        topLeftLine2 = new Margin(leftX, topLin2Y);
        topLeftLine3 = new Margin(leftX, topLin3Y);
 
-       bottomLeftLine1 = new Margin(toInt(leftX * 1.5), bottomLine1Y);
-       bottomLeftLine2 = new Margin(leftX, bottomLine2Y);
+       bottomLeftLine1 = new Margin(leftX, bottomLine1Y);
+       bottomLeftLine2 = new Margin(toInt(leftX * 1.8), bottomLine2Y);
 
        topRightLine1 = new Margin(rightX, baseMargin);
        bottomRightLine1 = new Margin(rightX, bottomLine1Y);

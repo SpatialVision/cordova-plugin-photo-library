@@ -34,7 +34,7 @@ public class Watermarker {
 
         marking = src;
 
-        headerFooterSize = new Size(photo.size).multiply(1, 0.15);
+        headerFooterSize = new Size(photo.size).multiply(1, 0.12);
         header = new Rect(0, 0, photo.size.width, headerFooterSize.height);
         footer = new Rect(0, (photo.size.height - headerFooterSize.height), photo.size.width, photo.size.height);
 
@@ -72,7 +72,7 @@ public class Watermarker {
                 .rubberStampPosition(position)
                 .alpha(128)
                 .margin(margin.x, margin.y)
-                .textColor(Color.BLACK)
+                .textColor(Color.WHITE)
                 .textSize(this.position.textSize)
                 .build();
 
