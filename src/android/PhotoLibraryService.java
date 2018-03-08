@@ -196,7 +196,7 @@ public class PhotoLibraryService {
   public void saveImage(final Context context, final CordovaInterface cordova, final String url, String album, final JSONObjectRunnable completion)
     throws IOException, URISyntaxException {
 
-    Watermarking watermarking = new Watermarking(url);
+    Watermarking watermarking = new Watermarking(context, url);
 
     saveMedia(context, cordova, url, album, imageMimeToExtension, new FilePathRunnable() {
       @Override

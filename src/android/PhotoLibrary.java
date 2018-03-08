@@ -41,7 +41,7 @@ public class PhotoLibrary extends CordovaPlugin {
   @Override
   protected void pluginInitialize() {
     super.pluginInitialize();
-
+    Context context=this.cordova.getActivity().getApplicationContext();
     service = PhotoLibraryService.getInstance();
 
   }

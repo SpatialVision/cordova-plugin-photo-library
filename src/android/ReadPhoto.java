@@ -13,6 +13,11 @@ public class ReadPhoto {
     private static final String LOG_TAG = "Watermarking-ReadPhoto";
     final String url;
 
+    /**
+     * url should be similar to
+     * file:///storage/emulated/0/Android/data/au.com.spatialvision.consol.watermarking/cache/1520400932073.jpg
+     * @param url
+     */
     ReadPhoto(String url) {
         this.url = url;
     }
