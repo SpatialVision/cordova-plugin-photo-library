@@ -3,7 +3,6 @@ package com.terikon.cordova.photolibrary;
 /**
  * Created by gota on 8/03/18.
  */
-
 public class Size {
     final int width;
     final int height;
@@ -24,6 +23,10 @@ public class Size {
 
     int shorter() {
         return width < height? width: height;
+    }
+
+    ResponsiveSize responsiveSize() {
+        return ResponsiveSize.find(shorter());
     }
 
     int area() {

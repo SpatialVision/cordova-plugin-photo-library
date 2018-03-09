@@ -19,12 +19,11 @@ import com.vinaygaba.rubberstamp.RubberStampPosition;
 public class Watermarker {
     private static final String LOG_TAG = "Watermarker";
     final Photo photo;
-    final Size headerFooterSize;
     final Rect header;
     final Rect footer;
     final WatermarkLines lines;
     final Context context;
-    final WatermarkConfig position;
+    final WatermarkConfig config;
     private Bitmap marking;
 
     public Watermarker(Context context, Photo photo, WatermarkLines lines) {
@@ -33,15 +32,13 @@ public class Watermarker {
 
         marking = photo.src;
 
-        headerFooterSize = new Size(photo.size).multiply(1, 0.12);
-        header = new Rect(0, 0, photo.size.width, headerFooterSize.height);
-        footer = new Rect(0, (photo.size.height - headerFooterSize.height), photo.size.width, photo.size.height);
+        header = photo.header();
+        footer = photo.footer();
 
-        Log.d(LOG_TAG, "headerFooterSize: " + headerFooterSize);
         Log.d(LOG_TAG, "header: " + header);
         Log.d(LOG_TAG, "footer: " + footer);
 
-        position = new WatermarkConfig(photo);
+        config = new WatermarkConfig(photo);
 
         this.context = context;
         this.lines = lines;
@@ -51,17 +48,17 @@ public class Watermarker {
         return new Photo(
                 markHeaderFooter(marking)
                 //top left
-                .mark(marking, lines.id, RubberStampPosition.TOP_LEFT, position.topLeftLine1)
-                .mark(marking, lines.address, RubberStampPosition.TOP_LEFT, position.topLeftLine2)
-                .mark(marking, lines.name, RubberStampPosition.TOP_LEFT, position.topLeftLine3)
+                .mark(marking, lines.id, RubberStampPosition.TOP_LEFT, config.topLeftLine1)
+                .mark(marking, lines.address, RubberStampPosition.TOP_LEFT, config.topLeftLine2)
+                .mark(marking, lines.name, RubberStampPosition.TOP_LEFT, config.topLeftLine3)
                 //top right
-                .mark(marking, lines.name, RubberStampPosition.TOP_RIGHT, position.topRightLine1)
+                .mark(marking, lines.name, RubberStampPosition.TOP_RIGHT, config.topRightLine1)
                 //bottom left
-                .mark(marking, lines.lat, RubberStampPosition.BOTTOM_LEFT, position.bottomLeftLine2)
-                .mark(marking, lines.lng, RubberStampPosition.BOTTOM_LEFT, position.bottomLeftLine1)
+                .mark(marking, lines.lat, RubberStampPosition.BOTTOM_LEFT, config.bottomLeftLine2)
+                .mark(marking, lines.lng, RubberStampPosition.BOTTOM_LEFT, config.bottomLeftLine1)
                 //bottom right
-                .mark(marking, lines.date, RubberStampPosition.BOTTOM_RIGHT, position.bottomRightLine2)
-                .mark(marking, lines.time, RubberStampPosition.BOTTOM_RIGHT, position.bottomRightLine1)
+                .mark(marking, lines.date, RubberStampPosition.BOTTOM_RIGHT, config.bottomRightLine2)
+                .mark(marking, lines.time, RubberStampPosition.BOTTOM_RIGHT, config.bottomRightLine1)
                 .marking, photo.exif);
     }
 
@@ -73,7 +70,7 @@ public class Watermarker {
                 .alpha(255)
                 .margin(margin.x, margin.y)
                 .textColor(Color.WHITE)
-                .textSize(this.position.textSize)
+                .textSize(this.config.textSize)
                 .build();
 
         RubberStamp rubberStamp = new RubberStamp(context);

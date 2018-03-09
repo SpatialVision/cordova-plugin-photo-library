@@ -23,20 +23,15 @@ public class WatermarkConfig {
     }
 
     public WatermarkConfig(Photo photo) {
-
-       //this.size = size;
-       //90
-       //45
-       final Size size = photo.size;
-       textSize = size.shorter() / 100 * 3;
+       textSize = photo.textSize();
        Log.d(LOG_TAG, "textSize: " + textSize);
 
-       final double lineMultiply = 1.2;
-       final int baseMargin = 30;
+       final double lineMultiply = photo.lineMultiply();
+       final int baseMargin = photo.baseMargin();
        final int leftX = baseMargin;
-       final int rightX = -(baseMargin * 3);
-       final int topLin2Y = toInt((textSize * lineMultiply));
-       final int topLin3Y = toInt((textSize * lineMultiply * 2));
+       final int rightX = photo.rightX();
+       final int topLin2Y = photo.topLin2Y();
+       final int topLin3Y = photo.topLin3Y();
 
        final int bottomLine1Y = -(baseMargin);
        final int bottomLine2Y = -toInt(baseMargin + (textSize * lineMultiply));
