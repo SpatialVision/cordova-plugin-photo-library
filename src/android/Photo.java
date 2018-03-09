@@ -21,12 +21,12 @@ public class Photo {
     }
 
     Rect header() {
-      Size headerSize = new Size(size).multiply(1, 0.09);
+      Size headerSize = new Size(size).multiply(1, size.isPortrait()? 0.09: 0.12);
       return new Rect(0, 0, size.width, headerSize.height);
     }
 
     Rect footer() {
-      Size  footerSize = new Size(size).multiply(1, 0.07);
+      Size  footerSize = new Size(size).multiply(1, size.isPortrait()? 0.07: 0.09);
       return new Rect(0, (size.height - footerSize.height), size.width, size.height);
     }
 
@@ -36,6 +36,14 @@ public class Photo {
 
     int baseMargin() { return 30; }
 
+    double lineMultiplyTopLineSmall() {
+      return size.isPortrait()? 1.5 : 1.3;
+    }
+
+    double line3MultiplyTopLineSmall() {
+        return size.isPortrait()? 1.6 : 1.7;
+    }
+
     int topLin2Y() {
         switch (size.responsiveSize()) {
             case LARGE:
@@ -43,7 +51,7 @@ public class Photo {
             case MEDIUM:
             case SMALL:
             default:
-                return toInt((textSize() * 1.5));
+                return toInt((textSize() * lineMultiplyTopLineSmall()));
         }
     }
 
@@ -54,7 +62,7 @@ public class Photo {
             case MEDIUM:
             case SMALL:
             default:
-                return toInt((textSize() * 1.5 * 1.6));
+                return toInt((textSize() * lineMultiplyTopLineSmall() * line3MultiplyTopLineSmall()));
         }
 
     }

@@ -34,7 +34,6 @@ public class WatermarkConfig {
        final int topLin3Y = photo.topLin3Y();
 
        final int bottomLine1Y = photo.bottomLine1Y();
-       //final int bottomLine2Y = photo.bottomLine2Y();
 
        final int bottomRightLine2Y = -toInt(baseMargin + (textSize * (lineMultiply + 0.2)));
 

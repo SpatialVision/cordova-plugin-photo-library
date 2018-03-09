@@ -21,8 +21,12 @@ public class Size {
                         Double.valueOf(this.height * heightBy).intValue());
     }
 
+    boolean isPortrait() {
+        return width < height;
+    }
+
     int shorter() {
-        return width < height? width: height;
+        return isPortrait()? width: height;
     }
 
     ResponsiveSize responsiveSize() {
