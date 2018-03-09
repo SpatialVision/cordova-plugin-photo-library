@@ -1,12 +1,13 @@
 package com.terikon.cordova.photolibrary;
 
+import android.util.Log;
+
 /**
  * Created by gota on 8/03/18.
  */
 
-public class Position {
-    final int width;
-    final int height;
+public class WatermarkConfig {
+    private static final String LOG_TAG = "WatermarkConfig";
 
     final Margin topLeftLine1;
     final Margin topLeftLine2;
@@ -17,42 +18,46 @@ public class Position {
     final Margin bottomRightLine1;
     final Margin bottomRightLine2;
     final int textSize;
-    final int area;
+    static int toInt(double val) {
+        return Double.valueOf(val).intValue();
+    }
 
-    public Position(int width, int height) {
-       this.width = width;
-       this.height = height;
+    public WatermarkConfig(Photo photo) {
 
-       area = width * height;
-       textSize = 90;
-       final double lineMultiply = 1.4;
+       //this.size = size;
+       //90
+       //45
+       final Size size = photo.size;
+       textSize = size.shorter() / 100 * 3;
+       Log.d(LOG_TAG, "textSize: " + textSize);
+
+       final double lineMultiply = 1.2;
        final int baseMargin = 30;
        final int leftX = baseMargin;
        final int rightX = -(baseMargin * 3);
-       final int topLin2Y = Double.valueOf(baseMargin + (textSize * lineMultiply)).intValue();
-       final int topLin3Y = Double.valueOf(baseMargin + (textSize * lineMultiply * 2)).intValue();
+       final int topLin2Y = toInt((textSize * lineMultiply));
+       final int topLin3Y = toInt((textSize * lineMultiply * 2));
 
        final int bottomLine1Y = -(baseMargin);
-       final int bottomLine2Y = -Double.valueOf(baseMargin + (textSize * lineMultiply)).intValue();
+       final int bottomLine2Y = -toInt(baseMargin + (textSize * lineMultiply));
+
+       final int bottomRightLine2Y = -toInt(baseMargin + (textSize * (lineMultiply + 0.2)));
 
        topLeftLine1 = new Margin(leftX, baseMargin);
        topLeftLine2 = new Margin(leftX, topLin2Y);
        topLeftLine3 = new Margin(leftX, topLin3Y);
 
-       topRightLine1 = new Margin(rightX, baseMargin);
-
        bottomLeftLine1 = new Margin(leftX, bottomLine1Y);
-       bottomLeftLine2 = new Margin(leftX, bottomLine2Y);
+       bottomLeftLine2 = new Margin(toInt(leftX * 1.8), bottomLine2Y);
 
+       topRightLine1 = new Margin(rightX, baseMargin);
        bottomRightLine1 = new Margin(rightX, bottomLine1Y);
-       bottomRightLine2 = new Margin(rightX, bottomLine2Y);
+       bottomRightLine2 = new Margin(rightX, bottomRightLine2Y);
     }
 
     @Override
     public String toString() {
-        return "Position{" +
-                "width=" + width +
-                ", height=" + height +
+        return "WatermarkConfig{" +
                 ", topLeftLine1=" + topLeftLine1 +
                 ", topLeftLine2=" + topLeftLine2 +
                 ", topLeftLine3=" + topLeftLine3 +
@@ -61,7 +66,7 @@ public class Position {
                 ", bottomLeftLine2=" + bottomLeftLine2 +
                 ", bottomRightLine1=" + bottomRightLine1 +
                 ", textSize=" + textSize +
-                ", area=" + area +
+
                 '}';
     }
 }

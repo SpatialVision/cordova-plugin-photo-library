@@ -24,7 +24,7 @@ public class Watermarker {
     final Rect footer;
     final WatermarkLines lines;
     final Context context;
-    final LinePositions position;
+    final WatermarkConfig position;
     private Bitmap marking;
 
     public Watermarker(Context context, Photo photo, WatermarkLines lines) {
@@ -41,7 +41,7 @@ public class Watermarker {
         Log.d(LOG_TAG, "header: " + header);
         Log.d(LOG_TAG, "footer: " + footer);
 
-        position = new LinePositions();
+        position = new WatermarkConfig(photo);
 
         this.context = context;
         this.lines = lines;

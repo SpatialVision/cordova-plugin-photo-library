@@ -22,6 +22,10 @@ public class Size {
                         Double.valueOf(this.height * heightBy).intValue());
     }
 
+    int shorter() {
+        return width < height? width: height;
+    }
+
     int area() {
       return width * height;
     }

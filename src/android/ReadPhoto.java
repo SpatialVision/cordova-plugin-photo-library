@@ -36,14 +36,21 @@ public class ReadPhoto {
             exif.createInFile(filePath);
             exif.readExifData();
             //rotate = exif.getOrientation();
+            //read = BitmapFactory.decodeFile(url);
 
-            //return BitmapFactory.decodeFile(url);
             is = new URL(url).openStream();
             read = BitmapFactory.decodeStream( is );
+
             if(read == null) {
                 throw new RuntimeException("Unable to create bitmap from url");
             }
-            Log.d(LOG_TAG, "read: " + read);
+
+            Log.d(LOG_TAG, "read: " + read + " dencity: " + read.getDensity() +
+                    ", getWidth: " + read.getWidth() +
+                    ", getHeight: " + read.getHeight() +
+                    ", getScaledWidth(read.getDensity()): " + read.getScaledWidth(read.getDensity()) +
+                    ", getScaledHeight(read.getDensity()): " + read.getScaledHeight(read.getDensity())
+            );
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
