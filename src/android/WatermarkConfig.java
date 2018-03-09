@@ -33,8 +33,8 @@ public class WatermarkConfig {
        final int topLin2Y = photo.topLin2Y();
        final int topLin3Y = photo.topLin3Y();
 
-       final int bottomLine1Y = -(baseMargin);
-       final int bottomLine2Y = -toInt(baseMargin + (textSize * lineMultiply));
+       final int bottomLine1Y = photo.bottomLine1Y();
+       //final int bottomLine2Y = photo.bottomLine2Y();
 
        final int bottomRightLine2Y = -toInt(baseMargin + (textSize * (lineMultiply + 0.2)));
 
@@ -43,7 +43,7 @@ public class WatermarkConfig {
        topLeftLine3 = new Margin(leftX, topLin3Y);
 
        bottomLeftLine1 = new Margin(leftX, bottomLine1Y);
-       bottomLeftLine2 = new Margin(toInt(leftX * 1.8), bottomLine2Y);
+       bottomLeftLine2 = photo.bottomLeftLine2();
 
        topRightLine1 = new Margin(rightX, baseMargin);
        bottomRightLine1 = new Margin(rightX, bottomLine1Y);

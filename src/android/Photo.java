@@ -30,7 +30,6 @@ public class Photo {
       return new Rect(0, (size.height - footerSize.height), size.width, size.height);
     }
 
-
     int textSize() {
         return size.shorter() / 100 * 3;
     }
@@ -60,6 +59,25 @@ public class Photo {
 
     }
 
+    int bottomLine1Y() {
+      return -(baseMargin());
+    }
+
+    int bottomLine2Y() {
+      return -toInt(baseMargin() + (textSize() * 1.2));
+    }
+
+    Margin bottomLeftLine2() {
+        switch (size.responsiveSize()) {
+            case LARGE:
+                return new Margin(toInt(baseMargin() * 1.8), bottomLine2Y());
+            case MEDIUM:
+            case SMALL:
+            default:
+                return new Margin(toInt(baseMargin() * 1.5), bottomLine2Y());
+        }
+
+    }
 
     int rightX() {
         switch (size.responsiveSize()) {
